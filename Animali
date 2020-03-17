@@ -1,0 +1,56 @@
+package Progetto_02;
+
+import java.util.Scanner;
+
+
+public class cane_gatto_pecora_mucca {
+	public static void main(String args[]) {
+		Scanner in = new Scanner (System.in);
+		System.out.println("Inserisci il nome di un animale:");
+		String animale = in.nextLine();
+		System.out.println(animali(animale));
+		in.close();
+	}
+	
+		public static String animali(String tipoDiAnimale)
+		{		
+			String verso = null;
+			String descrizione = null;
+			boolean verifica = false;
+				
+		
+		if (tipoDiAnimale.equals("gatto")) {
+		verso = "Il verso del gatto è miao miao";
+		descrizione = "Il gatto è un mammifero";
+	
+		}
+		else if (tipoDiAnimale.equals("cane")) {
+			verso = "Il verso del cane è bau bau";
+			descrizione = "Il cane è un mammifero";
+			
+		}
+		else if(tipoDiAnimale.equals("pecora")) {
+			verso = "Il verso della pecora è bee bee";
+			descrizione = "La pecora è un mammifero";
+			verifica=true;
+			}
+		else if(tipoDiAnimale.equals("mucca")) {
+			verso = "Il verso della mucca è muu muu";
+			descrizione = "La mucca è un mammifero";
+			verifica=true;
+		}
+		else 
+		{
+			return "l'animale non è presente nella lista";
+		}
+		System.out.println(descrizione);
+		if(verifica)
+		{
+			System.out.println(verso);
+			return "";
+		}
+		else {
+			return verso;
+		}		
+}
+}

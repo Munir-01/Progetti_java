@@ -1,0 +1,207 @@
+package Pacchetto_05;
+
+import java.sql.*;
+import java.sql.Date;
+import java.io.*;
+import java.util.*;
+
+public class Esercizio_C_04_garage {
+	// JDBC driver name and database URL
+	       static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";   
+    	   static final String DB_URL = "jdbc:mysql://localhost/garage"; 
+    	 
+    	   //  Database credentials 
+    	   static final String USER = "root"; 
+    	   static final String PASS = ""; 
+	    
+	   public static void main(String[] args) throws SQLException, IOException  {
+		   //creazione menù scelta
+		    Scanner in = new Scanner (System.in);
+			System.out.println("Scegli fra:  1 - elenco automobili | 2 - ricerca automobile per marca | 3 - inserimento automobile |4 - esporta automobile");
+		    int sceltaMenu = in.nextInt();
+		
+		    Connection conn = null; 
+    	    Statement stmt = null;
+    	    PreparedStatement stmt3 = null;
+		    
+       if (sceltaMenu == 1) {
+       
+    	   
+    	   try{ 
+    	      //STEP 2: Register JDBC driver 
+    	      Class.forName("com.mysql.cj.jdbc.Driver"); 
+    	 
+    	      //STEP 3: Open a connection 
+    	      System.out.println("Connecting to database..."); 
+    	      conn = DriverManager.getConnection(DB_URL,USER,PASS); 
+    	 
+    	      //STEP 4: Execute a query 
+    	      System.out.println("Creating statement..."); 
+    	      stmt = conn.createStatement(); 
+
+    	 
+    	      // Let us select all the records and display them. 
+    	      String sql = "SELECT ID, marca, modello, cilindrata, data_immatricolazione, numero_posti FROM automobili"; 
+    	      ResultSet rs = stmt.executeQuery(sql); 
+    	 
+    	      //STEP 5: Extract data from result set 
+    	      while(rs.next()){ 
+    	         //Retrieve by column name 
+    	         int ID  = rs.getInt("ID"); 
+    	         String marca = rs.getString("marca"); 
+    	         String modello = rs.getString("modello"); 
+    	         int cilindrata = rs.getInt("cilindrata");
+    	         Date data_immatricolazione = rs.getDate("data_immatricolazione");
+    	         int numero_posti = rs.getInt("numero_posti");
+    	 
+    	         //Display values 
+    	         System.out.println("ID: " + ID); 
+    	         System.out.println("marca: " + marca); 
+    	         System.out.println("modello: " + modello); 
+    	         System.out.println("cilindrata: " + cilindrata); 
+    	         System.out.println("data_immatricolazione: " + data_immatricolazione);
+    	         System.out.println("numero_posti: " + numero_posti);
+    	         System.out.println("\n");
+    	      } 
+    	      //STEP 6: Clean-up environment 
+    	      rs.close(); 
+    	      stmt.close(); 
+    	      conn.close(); 
+    	   }catch(SQLException se){ 
+    	      //Handle errors for JDBC 
+    	      se.printStackTrace(); 
+    	   }catch(Exception e){ 
+    	      //Handle errors for Class.forName 
+    	      e.printStackTrace(); 
+    	   }finally{ 
+    	      //finally block used to close resources 
+    	      try{ 
+    	         if(stmt!=null)
+    	        	  stmt.close(); 
+    	      }catch(SQLException se2){ 
+    	      }// nothing we can do 
+    	      try{ 
+    	         if(conn!=null) 
+    	            conn.close(); 
+    	      }catch(SQLException se){ 
+    	         se.printStackTrace(); 
+    	      }//end finally try 
+    	   }//end try 
+    	   System.out.println("Arrivederci & grazie!"); 
+    	}//end main 
+       
+         else if(sceltaMenu == 2) {
+        	 //PreparedStatement stmt2 = null;
+        	 conn = DriverManager.getConnection(DB_URL,USER,PASS);
+             System.out.println("Scrivi una marca di automobile");
+             Scanner marcaDigitata = new Scanner (System.in);
+             String marcaSelezionata = marcaDigitata.nextLine();
+             
+            
+             
+        	// String sql = "SELECT marca, modello, numero_posti FROM automobili WHERE marca = ?";
+        	PreparedStatement stmt2 = conn.prepareStatement("SELECT marca, modello, numero_posti FROM automobili WHERE marca = ?");
+        	 stmt2.setString(1, marcaSelezionata);
+        	 ResultSet rs = stmt2.executeQuery();
+        	 
+        	 while (rs.next()) {
+        		 
+        		 String marca = rs.getString("marca");
+        		 String modello = rs.getString("modello");
+        		 int numeroPosti = rs.getInt("numero_posti");
+        		 
+        		 System.out.println("marca: " + marca);
+        		 System.out.println("modello: " + modello);
+        		 System.out.println("numero posti: " + numeroPosti);
+        	 }
+        	 stmt2.close();
+        	 conn.close();
+        	 System.out.println("Arrivederci & grazie");
+         }
+         else if (sceltaMenu == 3) {
+        	 conn = DriverManager.getConnection(DB_URL,USER,PASS); 
+        	 
+        	 System.out.println("Inserisci ID");
+        	 Scanner IDinserito = new Scanner (System.in);
+             String id_inserito = IDinserito.nextLine();
+        	 
+        	 System.out.println("Inserisci marca");
+        	 Scanner marcaInserita = new Scanner (System.in);
+             String marca_inserita = marcaInserita.nextLine();
+             
+        	 System.out.println("Inserisci modello");
+        	 Scanner modelloInserito = new Scanner (System.in);
+             String modello_inserito = modelloInserito.nextLine();
+             
+        	 System.out.println("Inserisci cilindrata");
+        	 Scanner cilindarataInserita = new Scanner (System.in);
+             int cilindrata_inserita = cilindarataInserita.nextInt();
+             
+        	 System.out.println("Inserisci data di immatricolazione");
+        	 Scanner dataImmatricolazioneInserita = new Scanner (System.in);
+             String data_inserita = dataImmatricolazioneInserita.nextLine();
+             
+        	 System.out.println("Inserisci numero di posti");
+        	 Scanner numeroPostiInserito = new Scanner (System.in);
+             int posti_inseriti = numeroPostiInserito.nextInt();
+             
+             String sql;
+             sql = "INSERT INTO `garage`.`automobili` (ID, marca, modello, cilindrata, data_immatricolazione, numero_posti) VALUES (?,?,?,?,?,?)";           
+             stmt3 = conn.prepareStatement(sql);
+             
+             stmt3.setString(1, id_inserito);
+             stmt3.setString(2, marca_inserita);
+             stmt3.setString(3, modello_inserito);
+             stmt3.setInt(4, cilindrata_inserita);
+             stmt3.setString(5, data_inserita);
+             stmt3.setInt(6, posti_inseriti);
+             stmt3.execute();
+             
+             System.out.println("Auto inserita nel database!");
+             System.out.println();
+             System.out.println("Arrivederci & grazie!");
+         }
+       
+         else if (sceltaMenu == 4) {
+        	 conn = DriverManager.getConnection(DB_URL,USER,PASS);
+        	 
+        	 System.out.println("Creazione file in 'D:/Java Projects/esportazione_auto.txt'");
+        	 System.out.println();
+        	 File file_auto = new File("D:/Java Projects/esportazione_auto.txt");
+        	 file_auto.createNewFile();
+        	 FileWriter writer = new FileWriter(file_auto);
+        	 String sql = "SELECT ID, marca, modello, cilindrata, data_immatricolazione, numero_posti FROM automobili";
+        	 stmt = conn.prepareStatement(sql);
+   	         ResultSet rs = stmt.executeQuery(sql);
+   	         
+   	         while(rs.next()){ 
+ 	         //Retrieve by column name 
+ 	         int ID  = rs.getInt("ID"); 
+ 	         String marca = rs.getString("marca"); 
+ 	         String modello = rs.getString("modello"); 
+ 	         int cilindrata = rs.getInt("cilindrata");
+ 	         Date data_immatricolazione = rs.getDate("data_immatricolazione");
+ 	         int numero_posti = rs.getInt("numero_posti");
+ 	 
+ 	         //Display values 
+ 	         System.out.println("ID: " + ID); 
+ 	         System.out.println("marca: " + marca); 
+ 	         System.out.println("modello: " + modello); 
+ 	         System.out.println("cilindrata: " + cilindrata); 
+ 	         System.out.println("data_immatricolazione: " + data_immatricolazione);
+ 	         System.out.println("numero_posti: " + numero_posti);
+ 	         System.out.println("\n");
+ 	         writer.write(ID+"\n"+marca+"\n"+modello+"\n"+cilindrata+"\n"+data_immatricolazione+"\n"+numero_posti+"\n"+"-------------------"+"\n"); 
+ 	      }  
+   	         writer.flush(); 
+   	         writer.close();
+   	         System.out.println("Arrivederci & grazie!");
+         }
+         else {
+        	 System.out.println("Inserire un codice di scelta valido");       	 
+         }
+         
+         }
+	   
+  }
+

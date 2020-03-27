@@ -1,0 +1,38 @@
+package Pacchetto_05;
+
+import java.io.*;
+import java.util.*;
+
+public class Esercizio_B_04 {
+	public static void main(String args[])throws IOException {
+		ArrayList<String> a = new ArrayList<String>();
+		
+		a.add("Ram0");
+		a.add("Ram1");
+		a.add("Ram2");
+		a.add("Ram3");
+		a.add("Ram4");
+		
+		System.out.println("Questi sono i primi valori dell'array: " + a);
+           
+		System.out.println("Il valore in posizione due è: " + a.get(2));
+		
+		
+		System.out.println("Scrivo file allocato in: 'D:/Java Projects/Esercizio_B_04.txt'");
+		File file = new File("D:/Java Projects/Esercizio_B_04.txt"); 
+	      file.createNewFile();  
+	      FileWriter writer = new FileWriter(file);
+          for(String contenuto : a) {
+	      writer.write(contenuto+"\n"); 
+          }
+	      writer.flush(); 
+	      writer.close(); 
+			      
+	      a.remove(3);
+			System.out.println("L'array senza valore in posizione 3 è: " + a);
+			
+			a.add("Ram3");
+			Collections.sort(a);
+			System.out.println("Questo è l'array di nuovo con tutti gli elementi: " + a);
+	}
+}

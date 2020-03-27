@@ -1,0 +1,58 @@
+package esercizi_web_02;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet({ "/Esercizio_02", "/esercizio2" })
+public class Esercizio_02 extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+    public Esercizio_02() {
+        super();
+  
+    }
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
+		 response.getWriter().append("Insersci nell'URL operando1, operando2 e operazione da eseguire" + "\n");
+		
+		String numero1 = request.getParameter("operando1");
+		String numero2 = request.getParameter("operando2");
+		String operatore = request.getParameter("operatore");
+		
+		float n1 = Float.parseFloat(numero1);
+		float n2 = Float.parseFloat(numero2);
+		
+		if (operatore.contentEquals("+")) {
+		float risultato = n1+n2;
+		response.getWriter().println("Il risultato e': " + risultato);
+		}
+		else if (operatore.contentEquals("-")) {
+			response.getWriter().println("sono qua");
+		float risultato = n1-n2;
+		response.getWriter().println("Il risultato e': " + risultato);
+		}
+		else if (operatore.contentEquals("*")) {
+		float risultato =  n1*n2;
+		response.getWriter().println("Il risultato e': " + risultato);
+
+		}
+		else if (operatore.contentEquals("/")) {
+		float risultato = n1/n2;
+		response.getWriter().println("Il risultato e': " + risultato);
+
+		}
+		else {
+		response.getWriter().print("Assegna un operatore fra +,-,*,/");	
+		}
+				
+		
+	}
+
+	}
+
+
